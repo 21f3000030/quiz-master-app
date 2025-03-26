@@ -1,0 +1,2 @@
+# QUIZ MASTER APP
+The project I am working on focuses on developing an interactive quiz app designed to facilitate collaboration and evaluation between students and teachers or institutions. This app enables institutions to create and assign chapter-based quizzes, allowing students to attempt them regularly. Students can track their performance, while institutions can monitor their progress and assess their understanding of various subjects and topics, ensuring a more structured and effective learning experience
