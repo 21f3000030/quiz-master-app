@@ -1,0 +1,140 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container-fluid p-0 bg-light" style="min-height: 100vh;">
+
+    <!-- Gradient Header -->
+    <div class="gradient-header text-white py-5">
+        <div class="container">
+            <h1 class="display-4 fw-bold text-center mb-4">
+                <i class="fas fa-edit me-2"></i>Edit Quiz: {{ quiz.name }}
+            </h1>
+        </div>
+    </div>
+
+    <!-- Navigation Bar -->
+    <nav class="navbar navbar-expand-lg navbar-dark shadow-sm" style="background: linear-gradient(135deg, #6366f1, #7c3aed);">
+        <div class="container">
+            <a class="navbar-brand d-flex align-items-center fw-bold" href="#">
+                <i class="fas fa-brain me-2 fs-4"></i>
+                QuizMaster
+            </a>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="container py-5">
+        <div class="row justify-content-center">
+            <div class="col-lg-8">
+                <div class="card shadow-lg border-0" style="border-radius: 15px;">
+                    <div class="card-body p-4 p-md-5">
+                        <form method="POST">
+                            <!-- Quiz Name -->
+                            <div class="mb-4">
+                                <label class="form-label small text-muted mb-2">QUIZ NAME</label>
+                                <div class="input-group border rounded-3">
+                                    <span class="input-group-text bg-transparent border-0">
+                                        <i class="fas fa-pencil-alt text-primary"></i>
+                                    </span>
+                                    <input type="text" 
+                                           class="form-control border-0 ps-0" 
+                                           id="name" 
+                                           name="name" 
+                                           value="{{ quiz.name }}" 
+                                           required>
+                                </div>
+                            </div>
+
+                            <!-- Date of Quiz -->
+                            <div class="mb-4">
+                                <label class="form-label small text-muted mb-2">DATE OF QUIZ</label>
+                                <div class="input-group border rounded-3">
+                                    <span class="input-group-text bg-transparent border-0">
+                                        <i class="fas fa-calendar text-primary"></i>
+                                    </span>
+                                    <input type="date" 
+                                           class="form-control border-0 ps-0" 
+                                           id="date_of_quiz" 
+                                           name="date_of_quiz" 
+                                           value="{{ quiz.date_of_quiz }}" 
+                                           required>
+                                </div>
+                            </div>
+
+                            <!-- Time Duration -->
+                            <div class="mb-4">
+                                <label class="form-label small text-muted mb-2">TIME DURATION (HH:MM)</label>
+                                <div class="input-group border rounded-3">
+                                    <span class="input-group-text bg-transparent border-0">
+                                        <i class="fas fa-clock text-primary"></i>
+                                    </span>
+                                    <input type="text" 
+                                           class="form-control border-0 ps-0" 
+                                           id="time_duration" 
+                                           name="time_duration" 
+                                           value="{{ quiz.time_duration }}" 
+                                           required 
+                                           placeholder="00:00">
+                                </div>
+                            </div>
+
+                            <!-- Total Marks -->
+                            <div class="mb-4">
+                                <label class="form-label small text-muted mb-2">TOTAL MARKS</label>
+                                <div class="input-group border rounded-3">
+                                    <span class="input-group-text bg-transparent border-0">
+                                        <i class="fas fa-star text-primary"></i>
+                                    </span>
+                                    <input type="number" 
+                                           class="form-control border-0 ps-0" 
+                                           id="total_marks" 
+                                           name="total_marks" 
+                                           value="{{ quiz.total_marks }}" 
+                                           required>
+                                </div>
+                            </div>
+
+                            <!-- Action Buttons -->
+                            <div class="d-grid gap-3 mt-4">
+                                <button type="submit" class="btn btn-primary py-3 hover-lift">
+                                    <i class="fas fa-save me-2"></i>Save Changes
+                                </button>
+                                <a href="{{ url_for('quizzes', chapter_id=quiz.chapter_id) }}" 
+                                   class="btn btn-secondary hover-lift">
+                                    Cancel
+                                </a>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+.gradient-header {
+    background: linear-gradient(135deg, #6366f1, #7c3aed);
+}
+
+.hover-lift {
+    transition: all 0.2s ease;
+    border-radius: 8px;
+}
+
+.hover-lift:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+}
+
+.input-group:focus-within {
+    border-color: #6366f1 !important;
+    box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.1);
+}
+
+.form-control:focus {
+    box-shadow: none !important;
+}
+</style>
+
+{% endblock %}

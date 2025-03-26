@@ -1,0 +1,141 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="quiz-header text-center mb-5">
+    <h1 class="quiz-title display-4 mb-3">{{ quiz.name }}</h1>
+    <div class="quiz-meta">
+        <span class="badge badge-pill badge-info mr-2">Time: {{ quiz.time_duration }}</span>
+        <span class="badge badge-pill badge-success">Total Marks: {{ questions|sum(attribute='marks') }}</span>
+    </div>
+    {% if quiz.remarks %}
+    <div class="quiz-instructions mt-4 p-4 rounded-lg">
+        <i class="fas fa-info-circle mr-2"></i>
+        {{ quiz.remarks }}
+    </div>
+    {% endif %}
+</div>
+
+<!-- Timer Section -->
+<div class="text-center mt-3">
+    <h4 class="display-4" id="timer" style="font-family: 'Roboto Mono', monospace; color: #E91E63; font-weight: 700;">Loading...</h4>
+</div>
+
+<form method="POST" action="{{ url_for('submit_quiz', quiz_id=quiz.id) }}">
+    <input type="hidden" name="user_id" value="{{ session.get('user_id') }}"> <!-- Include user_id if available -->
+    <div class="mt-5">
+        {% for question in questions %}
+        <div class="question-box mb-4 p-4 shadow-sm rounded-lg" style="background-color: #ffffff; border: 1px solid #e0e0e0;">
+            <h5 style="font-family: 'Poppins', sans-serif; color: #333; font-weight: 500;">{{ question.question_statement }} 
+                <span class="badge badge-pill badge-primary" style="background-color: #4A90E2; font-size: 0.9rem;">{{ question.marks }} Marks</span>
+            </h5> <!-- Display question text with marks -->
+            
+            <div class="options mt-3">
+                <div class="form-check mb-3">
+                    <input class="form-check-input" type="radio" name="question_{{ question.id }}" id="option_1_{{ question.id }}" value="1" required>
+                    <label class="form-check-label" for="option_1_{{ question.id }}" style="font-family: 'Lora', serif; color: #555;">
+                        {{ question.option1 }}
+                    </label>
+                </div>
+                <div class="form-check mb-3">
+                    <input class="form-check-input" type="radio" name="question_{{ question.id }}" id="option_2_{{ question.id }}" value="2">
+                    <label class="form-check-label" for="option_2_{{ question.id }}" style="font-family: 'Lora', serif; color: #555;">
+                        {{ question.option2 }}
+                    </label>
+                </div>
+                <div class="form-check mb-3">
+                    <input class="form-check-input" type="radio" name="question_{{ question.id }}" id="option_3_{{ question.id }}" value="3">
+                    <label class="form-check-label" for="option_3_{{ question.id }}" style="font-family: 'Lora', serif; color: #555;">
+                        {{ question.option3 }}
+                    </label>
+                </div>
+                <div class="form-check mb-3">
+                    <input class="form-check-input" type="radio" name="question_{{ question.id }}" id="option_4_{{ question.id }}" value="4">
+                    <label class="form-check-label" for="option_4_{{ question.id }}" style="font-family: 'Lora', serif; color: #555;">
+                        {{ question.option4 }}
+                    </label>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    
+    <div class="text-center mt-4 mb-5">
+        <button type="submit" class="btn btn-primary btn-lg px-5 py-3 shadow-sm" style="font-family: 'Poppins', sans-serif; font-weight: 500; background-color: #4A90E2; border: none;">Submit Quiz</button>
+    </div>
+</form>
+
+<script>
+    // Extract time duration from the template
+    let timeDuration = "{{ quiz.time_duration }}"; // Example: "01:30" (hh:mm)
+    let [hours, minutes] = timeDuration.split(':').map(num => parseInt(num));
+    
+    // Convert to seconds for countdown
+    let totalSeconds = (hours * 3600) + (minutes * 60);
+
+    function updateTimer() {
+        let hoursLeft = Math.floor(totalSeconds / 3600);
+        let minutesLeft = Math.floor((totalSeconds % 3600) / 60);
+        let secondsLeft = totalSeconds % 60;
+
+        // Format the time as hh:mm:ss
+        document.getElementById('timer').textContent = 
+            `${hoursLeft.toString().padStart(2, '0')}:${minutesLeft.toString().padStart(2, '0')}:${secondsLeft.toString().padStart(2, '0')}`;
+
+        if (totalSeconds <= 0) {
+            clearInterval(timerInterval);
+            alert("Time's up! Submitting quiz...");
+            document.querySelector('form').submit();  // Automatically submit the form when time is up
+        } else {
+            totalSeconds--;
+        }
+    }
+
+    // Update timer every second
+    let timerInterval = setInterval(updateTimer, 1000);
+</script>
+
+<style>
+    .quiz-header {
+        position: relative;
+        padding: 2rem;
+        background: white;
+        border-radius: 1.5rem;
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    }
+
+    .quiz-title {
+        font-family: 'Inter', sans-serif;
+        font-weight: 700;
+        color: var(--text-dark);
+        letter-spacing: -0.025em;
+    }
+    /* Add hover effect on the question box */
+    .question-box:hover {
+        background-color: #f8f9fa;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        transform: translateY(-2px);
+        transition: all 0.3s ease;
+    }
+
+    /* Customize radio button hover */
+    .form-check-input:hover {
+        border-color: #4A90E2;
+    }
+
+    .form-check-input:checked {
+        background-color: #4A90E2;
+        border-color: #4A90E2;
+    }
+
+    /* Add a nice animation to the Submit button */
+    .btn-primary {
+        transition: all 0.3s ease;
+    }
+
+    .btn-primary:hover {
+        transform: scale(1.05);
+        background-color: #357ABD;
+    }
+</style>
+
+{% endblock %}

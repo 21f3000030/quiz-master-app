@@ -1,0 +1,154 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container-fluid min-vh-100 bg-light">
+    <!-- Hero Section -->
+    <div class="text-center text-dark py-5" style="background: linear-gradient(135deg, #f8f9fa, #e9ecef);">
+        <div class="container">
+            <h1 class="display-5 fw-bold mb-3">Join Our Learning Community</h1>
+            <p class="lead text-muted">Create your account and unlock personalized learning experiences</p>
+        </div>
+    </div>
+
+    <!-- Registration Form Section -->
+    <div class="container py-5">
+        <div class="row justify-content-center">
+            <div class="col-md-8 col-lg-6">
+                <div class="card border-0 shadow-sm">
+                    <div class="card-body p-4 p-md-5">
+                        <h3 class="mb-4 text-center">Get Started</h3>
+                        <form method="POST" action="{{ url_for('register') }}">
+                            <!-- Full Name Field -->
+                            <div class="mb-4">
+                                <label for="full_name" class="form-label">Full Name</label>
+                                <div class="input-group">
+                                    <span class="input-group-text text-muted">
+                                        <i class="fas fa-user"></i>
+                                    </span>
+                                    <input type="text" class="form-control" id="full_name" name="full_name" 
+                                           placeholder="John Doe" required>
+                                </div>
+                            </div>
+
+                            <!-- Email Field -->
+                            <div class="mb-4">
+                                <label for="email" class="form-label">Email Address</label>
+                                <div class="input-group">
+                                    <span class="input-group-text text-muted">
+                                        <i class="fas fa-envelope"></i>
+                                    </span>
+                                    <input type="email" class="form-control" id="email" name="email" 
+                                           placeholder="name@example.com" required>
+                                </div>
+                            </div>
+
+                            <!-- Password Field -->
+                            <div class="mb-4">
+                                <label for="password" class="form-label">Password</label>
+                                <div class="input-group">
+                                    <span class="input-group-text text-muted">
+                                        <i class="fas fa-lock"></i>
+                                    </span>
+                                    <input type="password" class="form-control" id="password" 
+                                           name="password" placeholder="••••••••" required>
+                                </div>
+                            </div>
+
+                            <!-- Qualification Field -->
+                            <div class="mb-4">
+                                <label for="qualification" class="form-label">Highest Qualification</label>
+                                <select class="form-select" id="qualification" name="qualification" required>
+                                    <option value="">Select your qualification</option>
+                                    <option>High School</option>
+                                    <option>Bachelor's Degree</option>
+                                    <option>Master's Degree</option>
+                                    <option>Doctorate</option>
+                                    <option>Other</option>
+                                </select>
+                            </div>
+
+                            <!-- Date of Birth Field -->
+                            <div class="mb-4">
+                                <label for="dob" class="form-label">Date of Birth</label>
+                                <input type="date" class="form-control" id="dob" name="dob" required>
+                            </div>
+
+                            <!-- Submit Button -->
+                            <button type="submit" class="btn btn-primary w-100 py-2 mt-3">
+                                Create Account
+                            </button>
+                        </form>
+                        
+                        <div class="text-center mt-4">
+                            <p class="text-muted mb-0">Already have an account? 
+                                <a href="{{ url_for('login') }}" class="text-decoration-none">Sign in</a>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Features Section -->
+    <div class="bg-white py-5">
+        <div class="container text-center">
+            <h4 class="mb-4">Why Join Us?</h4>
+            <div class="row g-4">
+                <div class="col-md-4">
+                    <div class="p-3">
+                        <i class="fas fa-chart-line fa-2x text-primary mb-3"></i>
+                        <h5>Track Progress</h5>
+                        <p class="text-muted small">Monitor your learning journey with detailed insights</p>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="p-3">
+                        <i class="fas fa-award fa-2x text-primary mb-3"></i>
+                        <h5>Earn Achievements</h5>
+                        <p class="text-muted small">Get recognized for your learning milestones</p>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="p-3">
+                        <i class="fas fa-users fa-2x text-primary mb-3"></i>
+                        <h5>Join Community</h5>
+                        <p class="text-muted small">Connect with other learners worldwide</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .card {
+        border-radius: 12px;
+        transition: transform 0.2s;
+    }
+    
+    .form-control:focus {
+        border-color: #7c8ff7;
+        box-shadow: 0 0 0 3px rgba(124, 143, 247, 0.15);
+    }
+    
+    .btn-primary {
+        background: linear-gradient(135deg, #6366f1, #7c8ff7);
+        border: none;
+        padding: 0.75rem 1.5rem;
+    }
+    
+    .btn-primary:hover {
+        background: linear-gradient(135deg, #5659e8, #6c7fef);
+    }
+    
+    .input-group-text {
+        background-color: #f8f9fa;
+        border-right: none;
+    }
+    
+    .form-control {
+        border-left: none;
+    }
+</style>
+{% endblock %}

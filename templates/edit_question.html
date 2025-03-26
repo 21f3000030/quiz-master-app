@@ -1,0 +1,147 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container-fluid p-0 bg-light" style="min-height: 100vh;">
+
+    <!-- Gradient Header -->
+    <div class="gradient-header text-white py-5">
+        <div class="container">
+            <h1 class="display-4 fw-bold text-center mb-4">
+                <i class="fas fa-edit me-2"></i>Edit Question
+            </h1>
+        </div>
+    </div>
+
+    <!-- Navigation Bar -->
+    <nav class="navbar navbar-expand-lg navbar-dark shadow-sm" style="background: linear-gradient(135deg, #6366f1, #7c3aed);">
+        <div class="container">
+            <a class="navbar-brand d-flex align-items-center fw-bold" href="#">
+                <i class="fas fa-brain me-2 fs-4"></i>
+                QuizMaster
+            </a>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="container py-5">
+        <div class="row justify-content-center">
+            <div class="col-lg-8">
+                <div class="card shadow-lg border-0" style="border-radius: 15px;">
+                    <div class="card-body p-4 p-md-5">
+                        <form method="POST" action="{{ url_for('edit_question', question_id=question.id) }}">
+                            <!-- Question Statement -->
+                            <div class="mb-4">
+                                <label class="form-label small text-muted mb-2">QUESTION STATEMENT</label>
+                                <div class="input-group border rounded-3">
+                                    <span class="input-group-text bg-transparent border-0">
+                                        <i class="fas fa-question text-primary"></i>
+                                    </span>
+                                    <textarea class="form-control border-0 ps-0" 
+                                              id="question_statement" 
+                                              name="question_statement" 
+                                              rows="4" 
+                                              required>{{ question.question_statement }}</textarea>
+                                </div>
+                            </div>
+
+                            <!-- Options Grid -->
+                            <div class="row g-3 mb-4">
+                                {% for option in [1, 2, 3, 4] %}
+                                <div class="col-md-6">
+                                    <div class="input-group border rounded-3">
+                                        <span class="input-group-text bg-transparent border-0">
+                                            <i class="fas fa-dot-circle text-primary"></i>
+                                        </span>
+                                        <input type="text" 
+                                               class="form-control border-0 ps-0" 
+                                               id="option{{ option }}" 
+                                               name="option{{ option }}" 
+                                               value="{{ question['option' ~ option] }}" 
+                                               required 
+                                               placeholder="Option {{ option }}">
+                                    </div>
+                                </div>
+                                {% endfor %}
+                            </div>
+
+                            <!-- Correct Answer -->
+                            <div class="mb-4">
+                                <label class="form-label small text-muted mb-2">CORRECT ANSWER</label>
+                                <div class="input-group border rounded-3">
+                                    <span class="input-group-text bg-transparent border-0">
+                                        <i class="fas fa-check-circle text-primary"></i>
+                                    </span>
+                                    <select class="form-control border-0 ps-0" 
+                                            id="correct_option" 
+                                            name="correct_option" 
+                                            required>
+                                        {% for option in [1, 2, 3, 4] %}
+                                        <option value="{{ option }}" {% if question.correct_option == option %}selected{% endif %}>
+                                            Option {{ option }}
+                                        </option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                            </div>
+
+                            <!-- Marks -->
+                            <div class="mb-4">
+                                <label class="form-label small text-muted mb-2">MARKS</label>
+                                <div class="input-group border rounded-3">
+                                    <span class="input-group-text bg-transparent border-0">
+                                        <i class="fas fa-star text-primary"></i>
+                                    </span>
+                                    <input type="number" 
+                                           class="form-control border-0 ps-0" 
+                                           id="marks" 
+                                           name="marks" 
+                                           value="{{ question.marks }}" 
+                                           required 
+                                           min="1">
+                                </div>
+                            </div>
+
+                            <!-- Action Buttons -->
+                            <div class="d-grid gap-3 mt-4">
+                                <button type="submit" class="btn btn-primary py-3 hover-lift">
+                                    <i class="fas fa-save me-2"></i>Update Question
+                                </button>
+                                <a href="{{ url_for('view_questions', quiz_id=question.quiz_id) }}" 
+                                   class="btn btn-secondary hover-lift">
+                                    Cancel
+                                </a>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+.gradient-header {
+    background: linear-gradient(135deg, #6366f1, #7c3aed);
+}
+
+.hover-lift {
+    transition: all 0.2s ease;
+    border-radius: 8px;
+}
+
+.hover-lift:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+}
+
+.input-group:focus-within {
+    border-color: #6366f1 !important;
+    box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.1);
+}
+
+.form-control:focus {
+    box-shadow: none !important;
+}
+</style>
+
+{% endblock %}

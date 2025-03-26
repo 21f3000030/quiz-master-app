@@ -1,0 +1,218 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container-fluid p-0 bg-light" style="min-height: 100vh;">
+
+    <!-- Navigation Bar -->
+    <nav class="navbar navbar-expand-lg navbar-dark shadow-sm" style="background: linear-gradient(135deg, #6366f1, #7c3aed);">
+        <div class="container">
+            <a class="navbar-brand d-flex align-items-center fw-bold" href="#">
+                <i class="fas fa-brain me-2 fs-4"></i>
+                QuizMaster
+            </a>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item mx-2">
+                        <a class="nav-link active" href="{{ url_for('admin_dashboard') }}">
+                            <i class="fas fa-home me-1"></i>Dashboard
+                        </a>
+                    </li>
+                    <li class="nav-item mx-2">
+                        <a class="nav-link active" href="{{ url_for('admin_summary') }}">
+                            <i class="fas fa-chart-pie me-1"></i>Analytics
+                        </a>
+                    </li>
+                    <li class="nav-item mx-2">
+                        <a class="nav-link active" href="{{ url_for('users') }}">
+                            <i class="fas fa-users me-1"></i>Users
+                        </a>
+                    </li>
+                    <li class="nav-item mx-2">
+                        <a class="nav-link" href="{{ url_for('logout') }}">
+                            <i class="fas fa-sign-out-alt me-1"></i>Logout
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Subject Header -->
+    <div class="container py-5">
+        <h1 class="text-center display-4 fw-bold text-primary mb-4">
+            <i class="fas fa-book-open me-2"></i>{{ subject.name }}
+        </h1>
+    </div>
+
+    <!-- Main Content -->
+    <div class="container pb-5">
+        <div class="row g-4">
+            <!-- Chapters List -->
+            <div class="col-lg-8">
+                <div class="card shadow-lg border-0" style="border-radius: 15px;">
+                    <div class="card-header bg-gradient-primary text-white py-4" 
+                         style="border-radius: 15px 15px 0 0;">
+                        <h3 class="mb-0 text-center">
+                            <i class="fas fa-list-alt me-2"></i>
+                            Existing Chapters
+                        </h3>
+                    </div>
+                    <div class="card-body p-4" style="max-height: 600px; overflow-y: auto;">
+                        <div class="row g-4">
+                            {% for chapter in chapters %}
+                            <div class="col-12">
+                                <div class="card hover-lift border-0" style="border-radius: 12px;">
+                                    <div class="card-body">
+                                        <div class="d-flex justify-content-between align-items-start">
+                                            <div class="flex-grow-1">
+                                                <h5 class="text-primary mb-3 fw-bold">{{ chapter.name }}</h5>
+                                                <div class="input-group-style mb-4">
+                                                    <div class="border rounded-3 p-3">
+                                                        <p class="text-muted small mb-0">{{ chapter.description }}</p>
+                                                    </div>
+                                                </div>
+                                                <div class="d-flex gap-2 flex-wrap">
+                                                    <a href="{{ url_for('view_chapter', chapter_id=chapter.id) }}" 
+                                                       class="btn btn-outline-primary hover-lift">
+                                                        <i class="fas fa-eye me-2"></i>View
+                                                    </a>
+                                                    <a href="{{ url_for('edit_chapter', chapter_id=chapter.id) }}" 
+                                                       class="btn btn-warning hover-lift">
+                                                        <i class="fas fa-edit me-2"></i>Edit
+                                                    </a>
+                                                    <form method="POST" action="{{ url_for('delete_chapter', chapter_id=chapter.id) }}">
+                                                        <button type="submit" 
+                                                                class="btn btn-danger hover-lift"
+                                                                onclick="return confirm('Delete this chapter permanently?')">
+                                                            <i class="fas fa-trash me-2"></i>Delete
+                                                        </button>
+                                                    </form>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            {% else %}
+                            <div class="col-12">
+                                <div class="text-center py-4">
+                                    <div class="bg-gradient-primary text-white rounded-circle p-4 mx-auto mb-3" 
+                                         style="width: 80px; height: 80px;">
+                                        <i class="fas fa-book fa-2x"></i>
+                                    </div>
+                                    <h5 class="text-muted mb-3">No Chapters Found</h5>
+                                    <p class="text-muted small">Start by creating your first chapter</p>
+                                </div>
+                            </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Add New Chapter Card -->
+            <div class="col-lg-4">
+                <div class="card shadow-lg border-0" style="border-radius: 15px;">
+                    <div class="card-header bg-gradient-primary text-white py-4" 
+                         style="border-radius: 15px 15px 0 0;">
+                        <h3 class="mb-0 text-center">
+                            <i class="fas fa-plus-circle fa-fw me-2"></i>
+                            Create New Chapter
+                        </h3>
+                    </div>
+                    <div class="card-body p-4">
+                        <form method="POST" action="{{ url_for('existing_chapters', subject_id=subject.id) }}">
+                            <div class="mb-4">
+                                <label class="form-label small text-muted mb-2">CHAPTER NAME</label>
+                                <div class="input-group border rounded-3">
+                                    <span class="input-group-text bg-transparent border-0">
+                                        <i class="fas fa-heading text-primary"></i>
+                                    </span>
+                                    <input type="text" 
+                                           class="form-control border-0 ps-0" 
+                                           name="name" 
+                                           placeholder="Enter chapter name"
+                                           required>
+                                </div>
+                            </div>
+                            <div class="mb-4">
+                                <label class="form-label small text-muted mb-2">DESCRIPTION</label>
+                                <div class="input-group border rounded-3">
+                                    <span class="input-group-text bg-transparent border-0 align-items-start">
+                                        <i class="fas fa-align-left text-primary mt-2"></i>
+                                    </span>
+                                    <textarea class="form-control border-0 ps-0" 
+                                              name="description" 
+                                              rows="3" 
+                                              placeholder="Write a brief description..."
+                                              required></textarea>
+                                </div>
+                            </div>
+                            <button type="submit" 
+                                    class="btn btn-lg btn-primary w-100 py-3 hover-lift">
+                                <i class="fas fa-plus me-2"></i>
+                                Create Chapter
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+.hover-lift {
+    transition: all 0.2s ease;
+    border-radius: 12px;
+}
+
+.hover-lift:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+}
+
+.bg-gradient-primary {
+    background: linear-gradient(135deg, #6366f1, #7c3aed) !important;
+}
+
+.input-group-style .border {
+    border-color: rgba(99, 102, 241, 0.2) !important;
+    border-radius: 8px;
+}
+
+.btn {
+    padding: 0.5rem 1.25rem;
+    border-radius: 8px;
+    font-weight: 500;
+    transition: all 0.2s ease;
+}
+
+.btn-outline-primary {
+    border: 2px solid #6366f1;
+    color: #6366f1;
+}
+
+.btn-outline-primary:hover {
+    background: linear-gradient(135deg, #6366f1, #7c3aed);
+    color: white !important;
+}
+
+.btn-warning {
+    background: #ffc107;
+    border-color: #ffc107;
+    color: black;
+}
+
+.btn-danger {
+    background: #dc3545;
+    border-color: #dc3545;
+}
+
+.form-control:focus {
+    box-shadow: none !important;
+    border-color: #6366f1;
+}
+</style>
+
+{% endblock %}

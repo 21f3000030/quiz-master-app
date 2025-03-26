@@ -1,0 +1,166 @@
+{% extends "base.html" %}
+
+{% block content %}
+<!-- Navbar Section -->
+<nav class="navbar navbar-expand-lg navbar-dark bg-gradient-primary shadow-sm" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
+    <div class="container">
+        <a class="navbar-brand d-flex align-items-center" href="#">
+            <i class="fas fa-brain me-2"></i>
+            <span class="fw-bold">QuizMaster</span>
+        </a>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ms-auto">
+                <li class="nav-item mx-2">
+                    <a class="nav-link active" href="{{ url_for('home') }}">
+                        <i class="fas fa-home me-1"></i>Home
+                    </a>
+                </li>
+                <li class="nav-item mx-2">
+                    <a class="nav-link active"href="{{ url_for('user_dashboard', user_id=user.id) }}"><i class="fas fa-dashboard me-1"></i>Dashboard</a>
+            
+                </li>
+                </li>
+                <li class="nav-item mx-2">
+                    <a class="nav-link" href="{{ url_for('logout') }}">
+                        <i class="fas fa-sign-out-alt me-1"></i>Logout
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+<br>
+<div class="dashboard-header">
+    <div class="container">
+        <h1 class="display-5 mb-3">📊 Performance Dashboard</h1>
+        <p class="lead">Your comprehensive learning analytics</p>
+    </div>
+    
+</div>
+
+<div class="container">
+    <!-- Stats Cards -->
+    <div class="row g-4 mb-4">
+        <div class="col-md-4">
+            <div class="card stat-card bg-primary text-white">
+                <div class="card-body">
+                    <h5 class="card-title"><i class="fas fa-chart-line"></i> Average Score</h5>
+                    <h2 class="card-text display-6">{{ average_score }}%</h2>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-4">
+            <div class="card stat-card bg-success text-white">
+                <div class="card-body">
+                    <h5 class="card-title"><i class="fas fa-trophy"></i> Highest Score</h5>
+                    <h2 class="card-text display-6">{{ highest_score }}%</h2>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card stat-card bg-warning text-dark">
+                <div class="card-body">
+                    <h5 class="card-title"><i class="fas fa-check-double"></i> Total Attempts</h5>
+                    <h2 class="card-text display-6">{{ total_attempts }}</h2>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Charts Section -->
+    <div class="row g-4">
+        <div class="col-lg-6">
+            <div class="chart-container">
+                <h4 class="mb-4"><i class="fas fa-chart-line me-2"></i>Progress Timeline</h4>
+                <div class="chart-wrapper">
+                    <canvas id="progressChart"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-6">
+            <div class="chart-container">
+                <h4 class="mb-4"><i class="fas fa-chart-pie me-2"></i>Score Distribution</h4>
+                <div class="chart-wrapper">
+                    <canvas id="distributionChart"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+<style>
+    .dashboard-header {
+        background: linear-gradient(135deg, #4a90e2 0%, #6c5ce7 100%);
+        color: white;
+        padding: 2rem 0;
+        margin-bottom: 2rem;
+        box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    }
+
+    .chart-container {
+        background: white;
+        border-radius: 15px;
+        padding: 1.5rem;
+        margin-bottom: 2rem;
+        box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+    }
+
+    .chart-wrapper {
+        position: relative;
+        min-height: 300px;
+    }
+</style>
+
+
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Progress Line Chart
+    const progressCtx = document.getElementById('progressChart').getContext('2d');
+    new Chart(progressCtx, {
+        type: 'line',
+        data: {
+            labels: {{ dates|tojson }},
+            datasets: [{
+                label: 'Scores',
+                data: {{ scores|tojson }},
+                borderColor: '#4a90e2',
+                borderWidth: 2,
+                tension: 0.3,
+                fill: true,
+                backgroundColor: 'rgba(74, 144, 226, 0.1)'
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: { legend: { display: false } },
+            scales: { y: { beginAtZero: true } }
+        }
+    });
+
+    // Distribution Chart
+    const distributionCtx = document.getElementById('distributionChart').getContext('2d');
+    new Chart(distributionCtx, {
+        type: 'doughnut',
+        data: {
+            labels: ['Good (80+)', 'Average (50-79)', 'Needs Improvement (<50)'],
+            datasets: [{
+                data: [{{ good_scores }}, {{ average_scores }}, {{ poor_scores }}],
+                backgroundColor: ['#00b894', '#fdcb6e', '#ff7675']
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: { legend: { position: 'bottom' } }
+        }
+    });
+});
+</script>
+
+{% endblock %}
+ 

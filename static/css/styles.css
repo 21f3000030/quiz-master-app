@@ -1,0 +1,49 @@
+/* Container for the icon and name */
+
+
+
+/* body {
+    background: url("../images/background.jpg") no-repeat center center fixed;
+    background-size: cover;
+} */
+
+.icon-container {
+    position: relative;
+    display: inline-block;
+    padding: 10px;
+    font-size: 20px;
+    cursor: pointer;
+    color: #555;
+    transition: all 0.3s ease;
+}
+
+.icon-container:hover {
+    color: #007bff; /* Change color on hover */
+}
+
+.icon-container .icon-name {
+    display: none; /* Hide the icon name initially */
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    margin-top: 5px;
+    font-size: 14px;
+    color: #007bff;
+}
+
+/* Show the icon name when hovering */
+.icon-container:hover .icon-name {
+    display: block;
+    
+}
+
+/* Add some spacing between icons */
+.icon-container + .icon-container {
+    margin-left: 15px;
+}
+
+
+
+
+

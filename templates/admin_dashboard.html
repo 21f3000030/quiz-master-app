@@ -1,0 +1,238 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container-fluid p-0 m-0 bg-light">
+
+    <!-- Navbar Section -->
+    <nav class="navbar navbar-expand-lg navbar-dark shadow-sm" style="background: linear-gradient(135deg, #6366f1, #7c3aed);">
+        <div class="container">
+            <a class="navbar-brand d-flex align-items-center fw-bold" href="#">
+                <i class="fas fa-brain me-2 fs-4"></i>
+                QuizMaster Admin
+            </a>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item mx-2">
+                        <a class="nav-link active" href="{{ url_for('home') }}">
+                            <i class="fas fa-home me-1"></i>Home
+                        </a>
+                    </li>
+                    <li class="nav-item mx-2">
+                        <a class="nav-link active" href="{{ url_for('admin_summary') }}">
+                            <i class="fas fa-chart-pie me-1"></i>Analytics
+                        </a>
+                    </li>
+                    <li class="nav-item mx-2">
+                        <a class="nav-link active" href="{{ url_for('users') }}">
+                            <i class="fas fa-user-cog me-1"></i>User Management
+                        </a>
+                    </li>
+                    <li class="nav-item mx-2">
+                        <a class="nav-link" href="{{ url_for('logout') }}">
+                            <i class="fas fa-sign-out-alt me-1"></i>Logout
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Admin Dashboard Header -->
+    <div class="container py-4">
+        <div class="d-flex align-items-center mb-4">
+            <div class="avatar bg-primary text-white rounded-circle me-3 d-flex align-items-center justify-content-center">
+                {{ full_name[0] }}
+            </div>
+            <div>
+                <h1 class="h3 mb-1 fw-bold">Welcome, {{ full_name }}</h1>
+            </div>
+        </div>
+    </div>
+
+    <!-- Search and New Subject Section -->
+    <div class="container mb-4">
+        <form method="GET" action="{{ url_for('admin_dashboard') }}" class="mb-3">
+            <div class="input-group shadow-sm">
+                <span class="input-group-text bg-white border-end-0">
+                    <i class="fas fa-search text-muted"></i>
+                </span>
+                <input 
+                    type="text" 
+                    name="search" 
+                    class="form-control border-start-0" 
+                    placeholder="Search subjects..." 
+                    value="{{ request.args.get('search', '') }}"
+                >
+                <button type="submit" class="btn btn-primary px-4" style="border-radius: 0 8px 8px 0;">
+                    <i class="fas fa-search"></i>
+                </button>
+            </div>
+        </form>
+        
+        <!-- New Subject Button -->
+        <div class="text-center">
+            <a href="{{ url_for('add_subject') }}" class="btn btn-primary shadow-sm">
+                <i class="fas fa-plus me-2"></i>New Subject
+            </a>
+        </div>
+    </div>
+
+    <!-- Subject Cards Section -->
+<div class="container">
+    <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+        {% for subject in subjects %}
+        <div class="col">
+            <div class="card border-0 shadow-sm h-100 clickable-card" 
+                 onclick="window.location.href='{{ url_for('existing_chapters', subject_id=subject.id) }}'"
+                 style="cursor: pointer;">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-start mb-3">
+                        <h5 class="card-title fw-bold mb-0 text-primary">{{ subject.name }}</h5>
+                        <div class="dropdown-container position-relative">
+                            <div class="dropdown">
+                                <button class="btn btn-link text-muted p-0" type="button" 
+                                        data-bs-toggle="dropdown" aria-expanded="false"
+                                        onclick="event.stopPropagation()">
+                                    <i class="fas fa-ellipsis-v"></i>
+                                </button>
+                                <ul class="dropdown-menu dropdown-menu-end">
+                                    <li>
+                                        <a class="dropdown-item" href="{{ url_for('existing_chapters', subject_id=subject.id) }}">
+                                            <i class="fas fa-eye me-2"></i>View
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a class="dropdown-item" href="{{ url_for('edit_subject', subject_id=subject.id) }}">
+                                            <i class="fas fa-edit me-2"></i>Edit
+                                        </a>
+                                    </li>
+                                    <li><hr class="dropdown-divider m-0"></li>
+                                    <li>
+                                        <form action="{{ url_for('delete_subject', subject_id=subject.id) }}" method="POST">
+                                            <button type="submit" class="dropdown-item text-danger" 
+                                                    onclick="return confirm('Delete this subject permanently?')">
+                                                <i class="fas fa-trash me-2"></i>Delete
+                                            </button>
+                                        </form>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    <p class="card-text text-muted small">{{ subject.description or 'No description available' }}</p>
+                </div>
+                <div class="card-footer bg-transparent border-0 pt-0">
+                    <div class="d-flex justify-content-between small text-muted">
+                        <span>Chapters: {{ subject.chapters|length }}</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+
+    <!-- Footer Section -->
+    <footer class="bg-white mt-5 py-4 border-top">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-md-6 text-center text-md-start mb-3 mb-md-0">
+                    <p class="mb-0 small text-muted">&copy; 2025 QuizMaster. All rights reserved.</p>
+                </div>
+                <div class="col-md-6 text-center text-md-end">
+                    <div class="d-flex justify-content-center justify-content-md-end gap-3">
+                        <a href="#" class="text-muted hover-primary">
+                            <i class="fab fa-twitter"></i>
+                        </a>
+                        <a href="#" class="text-muted hover-primary">
+                            <i class="fab fa-linkedin"></i>
+                        </a>
+                        <a href="#" class="text-muted hover-primary">
+                            <i class="fab fa-github"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+</div>
+
+<style>
+body, html {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+    overflow-x: hidden;
+}
+
+.container-fluid {
+    padding: 0 !important;
+    margin: 0 !important;
+    width: 100%;
+    max-width: 100%;
+}
+
+.avatar {
+    width: 50px;
+    height: 50px;
+    font-size: 1.25rem;
+    background: linear-gradient(135deg, #7c3aed, #6366f1);
+}
+
+.card {
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    border-radius: 12px;
+}
+
+.clickable-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 10px 20px rgba(0,0,0,0.08)!important;
+}
+
+.hover-primary:hover {
+    color: #6366f1!important;
+}
+
+.input-group-text {
+    border-radius: 8px 0 0 8px!important;
+}
+
+.form-control {
+    border-radius: 0 8px 8px 0!important;
+}
+.dropdown-container {
+    z-index: 1000;
+}
+
+.dropdown-menu {
+    min-width: 160px;
+    border-radius: 8px!important;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    padding: 0.5rem 0;
+}
+
+.dropdown-item {
+    padding: 0.5rem 1rem;
+    font-size: 0.9rem;
+}
+
+.dropdown-divider {
+    margin: 0.25rem 0;
+}
+
+
+.btn-primary {
+    background: linear-gradient(135deg, #6366f1, #7c3aed);
+    border: none;
+}
+</style>
+
+<script>
+// Update JavaScript to handle the container
+document.querySelectorAll('.dropdown-container').forEach(item => {
+    item.addEventListener('click', event => {
+        event.stopPropagation();
+    });
+});
+{% endblock %}

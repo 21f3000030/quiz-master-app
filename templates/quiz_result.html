@@ -1,0 +1,90 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container mt-5">
+    <!-- Quiz Results Header -->
+    <div class="text-center mb-5">
+        <h1 class="display-4 font-weight-bold" style="color: #2C3E50;">Quiz Results</h1>
+        <p class="lead text-muted" style="font-family: 'Lora', serif;">Review your performance and learn from your mistakes!</p>
+    </div>
+
+    <!-- Quiz Summary Card -->
+    <div class="card shadow-sm mb-5 border-0" style="border-radius: 15px; background-color: #F8F9FA;">
+        <div class="card-body p-4">
+            <h3 class="card-title mb-4" style="color: #2C3E50; font-family: 'Poppins', sans-serif;">Quiz Details</h3>
+            <div class="row">
+                <div class="col-md-6">
+                    <p class="mb-2"><strong>Quiz:</strong> <span style="color: #4A90E2;">{{ quiz.name }}</span></p>
+                    <p class="mb-2"><strong>User:</strong> <span style="color: #4A90E2;">{{ user.full_name }}</span></p>
+                </div>
+                <div class="col-md-6">
+                    <p class="mb-0 text-right h4" style="color: #27AE60;"><strong>Total Score:</strong> {{ quiz_response.total_scored }} / {{ quiz.total_marks }}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- User Answers Section -->
+    <div class="mb-5">
+        <h3 class="text-center mb-4" style="color: #2C3E50; font-family: 'Poppins', sans-serif;">Your Answers</h3>
+        <div class="list-group">
+            {% for question_id, user_answer in user_responses.items() %}
+            <div class="list-group-item mb-3 p-4 border-0 shadow-sm" style="border-radius: 15px; background-color: #FFFFFF; transition: all 0.3s ease;">
+                <h5 class="mb-3" style="color: #2C3E50; font-family: 'Poppins', sans-serif;">{{ loop.index }}. {{ quiz.questions[loop.index0].question_statement }}</h5>
+                <p class="mb-2"><strong>Your Answer:</strong> 
+                    <span class="text-{{ 'success' if user_answer == quiz.questions[loop.index0].correct_option else 'danger' }}" style="font-weight: 500;">
+                        {{ user_answer }}
+                    </span>
+                </p>
+                <p class="mb-0"><strong>Correct Answer:</strong> 
+                    <span class="text-success" style="font-weight: 500;">
+                        {{ quiz.questions[loop.index0].correct_option }}
+                    </span>
+                </p>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+
+    <!-- Call to Action -->
+    <div class="text-center mt-5 mb-5">
+        <a href="{{ url_for('user_dashboard', user_id=user.id) }}" class="btn btn-outline-info btn-lg px-5 py-3 shadow-sm" style="border-radius: 10px; font-family: 'Poppins', sans-serif; font-weight: 500;">Dashboard</a>
+
+    </div>
+</div>
+
+<style>
+    /* Add hover effect on list items */
+    .list-group-item:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+    }
+
+    /* Customize button hover effects */
+    .btn-primary:hover {
+        background-color: #357ABD !important;
+        transform: scale(1.05);
+        transition: all 0.3s ease;
+    }
+
+    .btn-outline-secondary:hover {
+        background-color: #6C757D;
+        color: #FFFFFF;
+        transform: scale(1.05);
+        transition: all 0.3s ease;
+    }
+
+    .btn-outline-info:hover {
+        background-color: #17A2B8;
+        color: #FFFFFF;
+        transform: scale(1.05);
+        transition: all 0.3s ease;
+    }
+
+    /* Smooth transitions for all elements */
+    .card, .list-group-item, .btn {
+        transition: all 0.3s ease;
+    }
+</style>
+
+{% endblock %}

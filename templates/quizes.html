@@ -1,0 +1,250 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container-fluid p-0 bg-light" style="min-height: 100vh;">
+
+    <!-- Chapter Header -->
+    <div class="gradient-header text-white py-5">
+        <div class="container">
+            <h1 class="display-4 fw-bold text-center mb-4">
+                <i class="fas fa-file-alt me-2"></i>{{ chapter.name }}
+            </h1>
+        </div>
+    </div>
+
+    <!-- Navigation Bar -->
+    <nav class="navbar navbar-expand-lg navbar-dark shadow-sm" style="background: linear-gradient(135deg, #6366f1, #7c3aed);">
+        <div class="container">
+            <a class="navbar-brand d-flex align-items-center fw-bold" href="#">
+                <i class="fas fa-brain me-2 fs-4"></i>
+                QuizMaster
+            </a>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item mx-2">
+                        <a class="nav-link active" href="{{ url_for('admin_dashboard') }}">
+                            <i class="fas fa-home me-1"></i>Dashboard
+                        </a>
+                    </li>
+                    <li class="nav-item mx-2">
+                        <a class="nav-link active" href="{{ url_for('admin_summary') }}">
+                            <i class="fas fa-chart-pie me-1"></i>Analytics
+                        </a>
+                    </li>
+                    <li class="nav-item mx-2">
+                        <a class="nav-link" href="{{ url_for('logout') }}">
+                            <i class="fas fa-sign-out-alt me-1"></i>Logout
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="container py-5">
+        <div class="row g-4">
+            <!-- Quizzes List -->
+            <div class="col-lg-8">
+                <div class="card shadow-lg border-0" style="border-radius: 15px;">
+                    <div class="card-header bg-gradient-primary text-white py-4" style="border-radius: 15px 15px 0 0;">
+                        <h3 class="mb-0 text-center">
+                            <i class="fas fa-list-ol me-2"></i>
+                            Available Quizzes
+                        </h3>
+                    </div>
+                    <div class="card-body p-4">
+                        <!-- Search Bar -->
+                        <div class="mb-4">
+                            <form method="GET" action="{{ url_for('quizzes', chapter_id=chapter.id) }}">
+                                <div class="input-group shadow-sm">
+                                    <span class="input-group-text bg-white border-end-0">
+                                        <i class="fas fa-search text-muted"></i>
+                                    </span>
+                                    <input type="text" 
+                                           name="search" 
+                                           class="form-control border-start-0" 
+                                           placeholder="Search quizzes..." 
+                                           value="{{ request.args.get('search', '') }}"
+                                           style="border-radius: 0 8px 8px 0;">
+                                    <button type="submit" class="btn btn-primary px-4">
+                                        <i class="fas fa-search"></i>
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+
+                        <div class="row g-4">
+                            {% for quiz in quizzes %}
+                            <div class="col-12">
+                                <div class="card hover-lift border-0" style="border-radius: 12px;">
+                                    <div class="card-body">
+                                        <div class="d-flex justify-content-between align-items-start">
+                                            <div class="flex-grow-1">
+                                                <h5 class="text-primary mb-3 fw-bold">{{ quiz.name }}</h5>
+                                                <div class="row g-3 mb-4">
+                                                    <div class="col-md-6">
+                                                        <div class="border rounded-3 p-3">
+                                                            <p class="text-muted small mb-0">
+                                                                <i class="fas fa-calendar me-2"></i>
+                                                                {{ quiz.date_of_quiz }}
+                                                            </p>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        <div class="border rounded-3 p-3">
+                                                            <p class="text-muted small mb-0">
+                                                                <i class="fas fa-clock me-2"></i>
+                                                                {{ quiz.time_duration }}
+                                                            </p>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="d-flex gap-2 flex-wrap">
+                                                    <a href="{{ url_for('view_questions', quiz_id=quiz.id) }}" 
+                                                       class="btn btn-primary hover-lift">
+                                                        <i class="fas fa-eye me-2"></i>View Questions
+                                                    </a>
+                                                    <a href="{{ url_for('edit_quiz', quiz_id=quiz.id) }}" 
+                                                       class="btn btn-warning hover-lift">
+                                                        <i class="fas fa-edit me-2"></i>Edit
+                                                    </a>
+                                                    <form method="POST" action="{{ url_for('delete_quiz', quiz_id=quiz.id) }}">
+                                                        <button type="submit" 
+                                                                class="btn btn-danger hover-lift"
+                                                                onclick="return confirm('Delete this quiz permanently?')">
+                                                            <i class="fas fa-trash me-2"></i>Delete
+                                                        </button>
+                                                    </form>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            {% else %}
+                            <div class="col-12">
+                                <div class="text-center py-4">
+                                    <div class="bg-gradient-primary text-white rounded-circle p-4 mx-auto mb-3" 
+                                         style="width: 80px; height: 80px;">
+                                        <i class="fas fa-question-circle fa-2x"></i>
+                                    </div>
+                                    <h5 class="text-muted mb-3">No Quizzes Found</h5>
+                                    <p class="text-muted small">Start by creating your first quiz</p>
+                                </div>
+                            </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Create New Quiz Card -->
+            <div class="col-lg-4">
+                <div class="card shadow-lg border-0" style="border-radius: 15px;">
+                    <div class="card-header bg-gradient-primary text-white py-4" style="border-radius: 15px 15px 0 0;">
+                        <h3 class="mb-0 text-center">
+                            <i class="fas fa-plus-circle me-2"></i>
+                            Create New Quiz
+                        </h3>
+                    </div>
+                    <div class="card-body p-4">
+                        <form method="POST" action="{{ url_for('quizzes', chapter_id=chapter.id) }}">
+                            <div class="mb-4">
+                                <label class="form-label small text-muted mb-2">QUIZ NAME</label>
+                                <div class="input-group border rounded-3">
+                                    <span class="input-group-text bg-transparent border-0">
+                                        <i class="fas fa-pencil-alt text-primary"></i>
+                                    </span>
+                                    <input type="text" 
+                                           class="form-control border-0 ps-0" 
+                                           name="name" 
+                                           placeholder="Enter quiz name"
+                                           required>
+                                </div>
+                            </div>
+                            <div class="mb-4">
+                                <label class="form-label small text-muted mb-2">DATE OF QUIZ</label>
+                                <div class="input-group border rounded-3">
+                                    <span class="input-group-text bg-transparent border-0">
+                                        <i class="fas fa-calendar text-primary"></i>
+                                    </span>
+                                    <input type="date" 
+                                           class="form-control border-0 ps-0" 
+                                           name="date_of_quiz" 
+                                           required>
+                                </div>
+                            </div>
+                            <div class="mb-4">
+                                <label class="form-label small text-muted mb-2">TIME DURATION</label>
+                                <div class="input-group border rounded-3">
+                                    <span class="input-group-text bg-transparent border-0">
+                                        <i class="fas fa-clock text-primary"></i>
+                                    </span>
+                                    <input type="text" 
+                                           class="form-control border-0 ps-0" 
+                                           name="time_duration" 
+                                           placeholder="HH:MM"
+                                           required>
+                                </div>
+                            </div>
+                            <div class="mb-4">
+                                <label class="form-label small text-muted mb-2">TOTAL MARKS</label>
+                                <div class="input-group border rounded-3">
+                                    <span class="input-group-text bg-transparent border-0">
+                                        <i class="fas fa-star text-primary"></i>
+                                    </span>
+                                    <input type="number" 
+                                           class="form-control border-0 ps-0" 
+                                           name="total_marks" 
+                                           required>
+                                </div>
+                            </div>
+                            <button type="submit" class="btn btn-primary w-100 py-3 hover-lift">
+                                <i class="fas fa-plus me-2"></i>
+                                Create Quiz
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+.gradient-header {
+    background: linear-gradient(135deg, #6366f1, #7c3aed);
+}
+
+.hover-lift {
+    transition: all 0.2s ease;
+    border-radius: 12px;
+}
+
+.hover-lift:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+}
+
+.bg-gradient-primary {
+    background: linear-gradient(135deg, #6366f1, #7c3aed) !important;
+}
+
+.input-group:focus-within {
+    border-color: #6366f1 !important;
+    box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.1);
+}
+
+.form-control:focus {
+    box-shadow: none !important;
+}
+
+.btn {
+    border-radius: 8px;
+    font-weight: 500;
+    transition: all 0.2s ease;
+}
+</style>
+
+{% endblock %}

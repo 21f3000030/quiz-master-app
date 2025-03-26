@@ -1,0 +1,106 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container-fluid p-0 bg-light" style="min-height: 100vh;">
+    <!-- Gradient Header -->
+    <div class="text-white py-5" style="background: linear-gradient(135deg, #6366f1, #7c3aed);">
+        <div class="container">
+            <div class="d-flex align-items-center justify-content-between">
+                <h1 class="h3 mb-0 fw-bold">
+                    <i class="fas fa-book me-2"></i>Create New Subject
+                </h1>
+                <a href="{{ url_for('admin_dashboard') }}" class="btn btn-light btn-sm">
+                    <i class="fas fa-arrow-left me-2"></i>Back to Dashboard
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Form Section -->
+    <div class="container py-5">
+        <div class="row justify-content-center">
+            <div class="col-lg-8">
+                <div class="card border-0 shadow-sm">
+                    <div class="card-body p-4 p-md-5">
+                        <form action="{{ url_for('add_subject') }}" method="POST">
+                            <!-- Subject Name Field -->
+                            <div class="mb-4">
+                                <label for="name" class="form-label fw-bold text-muted">Subject Name</label>
+                                <div class="input-group">
+                                    <span class="input-group-text bg-transparent border-end-0">
+                                        <i class="fas fa-book text-primary"></i>
+                                    </span>
+                                    <input type="text" 
+                                           class="form-control border-start-0" 
+                                           id="name" 
+                                           name="name" 
+                                           placeholder="Enter subject name"
+                                           required>
+                                </div>
+                            </div>
+
+                            <!-- Description Field -->
+                            <div class="mb-4">
+                                <label for="description" class="form-label fw-bold text-muted">Description</label>
+                                <div class="input-group">
+                                    <span class="input-group-text bg-transparent border-end-0 align-items-start">
+                                        <i class="fas fa-pencil-alt text-primary mt-2"></i>
+                                    </span>
+                                    <textarea class="form-control border-start-0" 
+                                              id="description" 
+                                              name="description" 
+                                              rows="4" 
+                                              placeholder="Write a brief description about this subject"></textarea>
+                                </div>
+                            </div>
+
+                            <!-- Submit Button -->
+                            <div class="d-grid mt-4">
+                                <button type="submit" class="btn btn-primary btn-lg py-3">
+                                    <i class="fas fa-plus-circle me-2"></i>Create Subject
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+.card {
+    border-radius: 12px;
+    transition: transform 0.2s ease;
+}
+
+.card:hover {
+    transform: translateY(-2px);
+}
+
+.input-group-text {
+    border-radius: 8px 0 0 8px !important;
+}
+
+.form-control {
+    border-radius: 0 8px 8px 0 !important;
+    transition: all 0.3s ease;
+}
+
+.form-control:focus {
+    box-shadow: none;
+    border-color: #6366f1;
+}
+
+.btn-primary {
+    background: linear-gradient(135deg, #7c3aed, #6366f1);
+    border: none;
+    transition: all 0.3s ease;
+}
+
+.btn-primary:hover {
+    background: linear-gradient(135deg, #6b21a8, #4f46e5);
+    transform: translateY(-1px);
+}
+</style>
+{% endblock %}

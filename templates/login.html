@@ -1,0 +1,136 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container-fluid min-vh-100 bg-light">
+    <!-- Hero Section -->
+    <div class="text-center text-dark py-5" style="background: linear-gradient(135deg, #f8f9fa, #e9ecef);">
+        <div class="container">
+            <h1 class="display-5 fw-bold mb-3">Welcome Back</h1>
+            <p class="lead text-muted">Continue your journey of quiz mastery</p>
+        </div>
+    </div>
+
+    <!-- Login Form Section -->
+    <div class="container py-5">
+        <div class="row justify-content-center">
+            <div class="col-md-8 col-lg-6">
+                <div class="card border-0 shadow-sm">
+                    <div class="card-body p-4 p-md-5">
+                        <h3 class="mb-4 text-center">Sign In to Your Account</h3>
+                        <form method="POST">
+                            <!-- Email Field -->
+                            <div class="mb-4">
+                                <label for="email" class="form-label">Email Address</label>
+                                <div class="input-group">
+                                    <span class="input-group-text text-muted">
+                                        <i class="fas fa-envelope"></i>
+                                    </span>
+                                    <input type="email" class="form-control" id="email" name="email" 
+                                           placeholder="name@example.com" required>
+                                </div>
+                            </div>
+
+                            <!-- Password Field -->
+                            <div class="mb-4">
+                                <label for="password" class="form-label">Password</label>
+                                <div class="input-group">
+                                    <span class="input-group-text text-muted">
+                                        <i class="fas fa-lock"></i>
+                                    </span>
+                                    <input type="password" class="form-control" id="password" 
+                                           name="password" placeholder="••••••••" required>
+                                </div>
+                            </div>
+
+                            <!-- Remember Me & Forgot Password -->
+                            <div class="d-flex justify-content-between align-items-center mb-4">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="remember">
+                                    <label class="form-check-label text-muted" for="remember">
+                                        Remember me
+                                    </label>
+                                </div>
+                                <a href="#!" class="text-decoration-none text-primary">Forgot password?</a>
+                            </div>
+
+                            <!-- Submit Button -->
+                            <button type="submit" class="btn btn-primary w-100 py-2">
+                                Sign In
+                            </button>
+                        </form>
+                        
+                        <div class="text-center mt-4">
+                            <p class="text-muted mb-0">Don't have an account? 
+                                <a href="{{ url_for('register') }}" class="text-decoration-none">Register here</a>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Features Section -->
+    <div class="bg-white py-5">
+        <div class="container text-center">
+            <h4 class="mb-4">Why Sign In?</h4>
+            <div class="row g-4">
+                <div class="col-md-4">
+                    <div class="p-3">
+                        <i class="fas fa-chart-line fa-2x text-primary mb-3"></i>
+                        <h5>Track Progress</h5>
+                        <p class="text-muted small">Resume your learning journey where you left off</p>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="p-3">
+                        <i class="fas fa-trophy fa-2x text-primary mb-3"></i>
+                        <h5>View Achievements</h5>
+                        <p class="text-muted small">Access your earned badges and certificates</p>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="p-3">
+                        <i class="fas fa-cog fa-2x text-primary mb-3"></i>
+                        <h5>Personalized Experience</h5>
+                        <p class="text-muted small">Customized recommendations based on your progress</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .card {
+        border-radius: 12px;
+        transition: transform 0.2s;
+    }
+    
+    .form-control:focus {
+        border-color: #7c8ff7;
+        box-shadow: 0 0 0 3px rgba(124, 143, 247, 0.15);
+    }
+    
+    .btn-primary {
+        background: linear-gradient(135deg, #6366f1, #7c8ff7);
+        border: none;
+        padding: 0.75rem 1.5rem;
+        transition: all 0.3s ease;
+    }
+    
+    .btn-primary:hover {
+        background: linear-gradient(135deg, #5659e8, #6c7fef);
+        transform: translateY(-1px);
+    }
+    
+    .input-group-text {
+        background-color: #f8f9fa;
+        border-right: none;
+    }
+    
+    .form-control {
+        border-left: none;
+    }
+</style>
+{% endblock %}

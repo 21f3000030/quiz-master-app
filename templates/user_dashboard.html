@@ -1,0 +1,232 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container-fluid p-0">
+<!-- Navbar Section -->
+<nav class="navbar navbar-expand-lg navbar-dark bg-gradient-primary shadow-sm" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
+    <div class="container">
+        <a class="navbar-brand d-flex align-items-center" href="#">
+            <i class="fas fa-brain me-2"></i>
+            <span class="fw-bold">QuizMaster</span>
+        </a>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ms-auto">
+                <li class="nav-item mx-2">
+                    <a class="nav-link active" href="{{ url_for('home') }}">
+                        <i class="fas fa-home me-1"></i>Home
+                    </a>
+                </li>
+                <li class="nav-item mx-2">
+                    <a class="nav-link" href="{{ url_for('user_summary_statistics', user_id=user.id) }}">
+                        <i class="fas fa-chart-line me-1"></i>Stats
+                    </a>
+                </li>
+                <li class="nav-item mx-2">
+                    <a class="nav-link" href="{{ url_for('logout') }}">
+                        <i class="fas fa-sign-out-alt me-1"></i>Logout
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+  <!-- Dashboard Header -->
+<div class="container py-5">
+    <div class="row align-items-center">
+        <div class="col-lg-8">
+            <div class="d-flex align-items-center mb-3">
+                <div class="avatar avatar-lg bg-primary text-white rounded-circle me-3">
+                    {{ user.full_name[0] }}
+                </div>
+                <div>
+                    <h1 class="h2 mb-0">Welcome back, {{ user.full_name }}</h1>
+                    <p class="text-muted mb-0">Ready to learn something new today?</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-4">
+            <div class="card bg-success text-white shadow">
+                <div class="card-body py-3">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <p class="small mb-1">Completed Quizzes</p>
+                            <h3 class="mb-0">{{ completed_quizzes }}</h3>
+                        </div>
+                        <i class="fas fa-trophy fa-3x opacity-25"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Content Navigation -->
+<div class="container">
+    <div class="row g-4">
+        <!-- Subjects Panel -->
+        <div class="col-lg-4">
+            <div class="card shadow-lg border-0">
+                <div class="card-header bg-white py-3 border-bottom">
+                    <h5 class="mb-0 d-flex align-items-center">
+                        <i class="fas fa-book-open text-primary me-2"></i>
+                        Subjects
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <form method="GET" action="{{ url_for('user_dashboard', user_id=user.id) }}">
+                        <div class="list-group">
+                            {% for subject in subjects %}
+                            <label class="list-group-item d-flex align-items-center rounded-2 mb-2 p-3 border-0 shadow-sm hover-shadow">
+                                <input 
+                                    type="radio" 
+                                    class="form-check-input flex-shrink-0 me-3" 
+                                    name="subject_id" 
+                                    value="{{ subject.id }}"
+                                    {% if subject.id == selected_subject_id %}checked{% endif %}>
+                                <div class="flex-grow-1">
+                                    <h6 class="mb-1">{{ subject.name }}</h6>
+                                    <small class="text-muted">{{ subject.chapters|length }} chapters</small>
+                                </div>
+                            </label>
+                            {% endfor %}
+                        </div>
+                        <button type="submit" class="btn btn-primary w-100 mt-4">
+                            <i class="fas fa-arrow-right me-2"></i>View Chapters
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- Chapters Panel -->
+        <div class="col-lg-4">
+            <div class="card shadow-lg border-0">
+                <div class="card-header bg-white py-3 border-bottom">
+                    <h5 class="mb-0 d-flex align-items-center">
+                        <i class="fas fa-layer-group text-info me-2"></i>
+                        Chapters
+                    </h5>
+                </div>
+                <div class="card-body">
+                    {% if chapters %}
+                    <form method="GET" action="{{ url_for('user_dashboard', user_id=user.id) }}">
+                        <input type="hidden" name="subject_id" value="{{ selected_subject_id }}">
+                        <div class="list-group">
+                            {% for chapter in chapters %}
+                            <label class="list-group-item d-flex align-items-center rounded-2 mb-2 p-3 border-0 shadow-sm hover-shadow">
+                                <input 
+                                    type="radio" 
+                                    class="form-check-input flex-shrink-0 me-3" 
+                                    name="chapter_id" 
+                                    value="{{ chapter.id }}"
+                                    {% if chapter.id == selected_chapter_id %}checked{% endif %}>
+                                <div class="flex-grow-1">
+                                    <h6 class="mb-1">{{ chapter.name }}</h6>
+                                    <small class="text-muted">{{ chapter.quizzes|length }} quizzes</small>
+                                </div>
+                            </label>
+                            {% endfor %}
+                        </div>
+                        <button type="submit" class="btn btn-info w-100 mt-4">
+                            <i class="fas fa-arrow-right me-2"></i>View Quizzes
+                        </button>
+                    </form>
+                    {% else %}
+                    <div class="text-center py-5">
+                        <i class="fas fa-folder-open fa-3x text-muted mb-3"></i>
+                        <p class="text-muted">Select a subject to view chapters</p>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+        <!-- Quizzes Panel -->
+        <div class="col-lg-4">
+            <div class="card shadow-lg border-0">
+                <div class="card-header bg-white py-3 border-bottom">
+                    <h5 class="mb-0 d-flex align-items-center">
+                        <i class="fas fa-clipboard-list text-success me-2"></i>
+                        Quizzes
+                    </h5>
+                </div>
+                <div class="card-body">
+                    {% if quizzes %}
+                    <div class="list-group">
+                        {% for quiz in quizzes %}
+                        <div class="list-group-item rounded-2 mb-3 p-3 border-0 shadow-sm">
+                            <div class="d-flex justify-content-between mb-2">
+                                <h6 class="mb-0">{{ quiz.name }}</h6>
+                                <span class="badge bg-primary">{{ quiz.time_duration }}m</span>
+                            </div>
+                            <p class="small text-muted mb-2">{{ quiz.description }}</p>
+                            <div class="d-flex justify-content-between align-items-center">
+                                <small class="text-muted">Max Score: {{ quiz.total_marks }}</small>
+                                <a href="{{ url_for('attempt_quiz', quiz_id=quiz.id) }}" class="btn btn-sm btn-success">
+                                    <i class="fas fa-play me-1"></i>Start
+                                </a>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                    {% else %}
+                    <div class="text-center py-5">
+                        <i class="fas fa-folder-open fa-3x text-muted mb-3"></i>
+                        <p class="text-muted">Select a chapter to view quizzes</p>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Footer -->
+<footer class="bg-light mt-5 py-4">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-md-6 text-center text-md-start">
+                <p class="mb-0 small text-muted">&copy; 2024 QuizMaster. All rights reserved.</p>
+            </div>
+            <div class="col-md-6 text-center text-md-end">
+                <div class="social-links">
+                    <a href="#" class="text-muted me-3"><i class="fab fa-twitter"></i></a>
+                    <a href="#" class="text-muted me-3"><i class="fab fa-linkedin"></i></a>
+                    <a href="#" class="text-muted"><i class="fab fa-github"></i></a>
+                </div>
+            </div>
+        </div>
+    </div>
+</footer>
+</div>
+
+<style>
+.avatar {
+    width: 60px;
+    height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 1.5rem;
+}
+
+.hover-shadow {
+    transition: all 0.2s ease;
+    cursor: pointer;
+}
+
+.hover-shadow:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15)!important;
+}
+
+.list-group-item {
+    transition: all 0.2s ease;
+}
+
+.form-check-input:checked + .flex-grow-1 {
+    color: #0d6efd;
+}
+</style>
+{% endblock %}

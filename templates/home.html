@@ -1,0 +1,188 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container-fluid p-0">
+    <!-- Hero Section -->
+    <section class="hero-section" style="background: linear-gradient(135deg, #6366f1, #8b5cf6);">
+        <div class="container text-center py-8">
+            <div class="hero-content text-white">
+                <h1 class="display-2 fw-bold mb-4 animate__animated animate__fadeInDown">Master Your Knowledge</h1>
+                <p class="lead fs-3 mb-5 opacity-90">Interactive Quizzes for Curious Minds</p>
+                <div class="cta-buttons">
+                    <a href="{{ url_for('register') }}" class="btn btn-light btn-lg px-5 py-3 me-3 rounded-pill shadow-lg">Get Started</a>
+                    <a href="#features" class="btn btn-outline-light btn-lg px-5 py-3 rounded-pill">Learn More</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section id="features" class="py-6 bg-light">
+        <div class="container">
+            <div class="text-center mb-5">
+                <h2 class="display-5 fw-bold mb-3">Get Started Now</h2>
+                <p class="text-muted fs-5">Join our community of learners and educators</p>
+            </div>
+            
+            <div class="row g-4">
+                <!-- Feature Cards -->
+                <div class="col-lg-4 col-md-6">
+                    <div class="feature-card bg-white p-5 rounded-4 shadow-sm h-100">
+                        <div class="icon-wrapper bg-primary text-white rounded-circle mb-4">
+                            <i class="fas fa-sign-in-alt fa-2x"></i>
+                        </div>
+                        <h3 class="h4 fw-bold mb-3">User Login</h3>
+                        <p class="text-muted">Access personalized quizzes and track your progress</p>
+                        <a href="{{ url_for('login') }}" class="btn btn-primary rounded-pill px-4">Sign In</a>
+                    </div>
+                </div>
+                
+                <div class="col-lg-4 col-md-6">
+                    <div class="feature-card bg-white p-5 rounded-4 shadow-sm h-100">
+                        <div class="icon-wrapper bg-success text-white rounded-circle mb-4">
+                            <i class="fas fa-user-plus fa-2x"></i>
+                        </div>
+                        <h3 class="h4 fw-bold mb-3">New Account</h3>
+                        <p class="text-muted">Join our learning community in just 2 minutes</p>
+                        <a href="{{ url_for('register') }}" class="btn btn-success rounded-pill px-4">Register</a>
+                    </div>
+                </div>
+                
+                <div class="col-lg-4 col-md-6">
+                    <div class="feature-card bg-white p-5 rounded-4 shadow-sm h-100">
+                        <div class="icon-wrapper bg-dark text-white rounded-circle mb-4">
+                            <i class="fas fa-lock fa-2x"></i>
+                        </div>
+                        <h3 class="h4 fw-bold mb-3">Admin Portal</h3>
+                        <p class="text-muted">Manage content and track platform analytics</p>
+                        <a href="{{ url_for('admin_login') }}" class="btn btn-dark rounded-pill px-4">Admin Login</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Testimonials Section -->
+    <section class="testimonials py-6">
+        <div class="container">
+            <div class="text-center mb-5">
+                <h2 class="display-5 fw-bold mb-3">What Our Users Say</h2>
+                <p class="text-muted fs-5">Join thousands of satisfied learners</p>
+            </div>
+            
+            <div class="row g-4">
+                <div class="col-lg-4">
+                    <div class="testimonial-card bg-white p-4 rounded-4 shadow-sm h-100">
+                        <div class="d-flex align-items-center mb-3">
+                            <img src="https://source.unsplash.com/80x80/?person" alt="User" class="rounded-circle me-3">
+                            <div>
+                                <h4 class="h5 fw-bold mb-0">Sarah Johnson</h4>
+                                <p class="text-muted mb-0">Data Scientist</p>
+                            </div>
+                        </div>
+                        <p class="text-muted">"The platform's intuitive design and quality content have transformed my learning experience."</p>
+                    </div>
+                </div>
+                
+                <div class="col-lg-4">
+                    <div class="testimonial-card bg-white p-4 rounded-4 shadow-sm h-100">
+                        <div class="d-flex align-items-center mb-3">
+                            <img src="https://source.unsplash.com/80x80/?student" alt="User" class="rounded-circle me-3">
+                            <div>
+                                <h4 class="h5 fw-bold mb-0">Mike Chen</h4>
+                                <p class="text-muted mb-0">University Student</p>
+                            </div>
+                        </div>
+                        <p class="text-muted">"The progress tracking features helped me identify my weak areas effectively."</p>
+                    </div>
+                </div>
+                
+                <div class="col-lg-4">
+                    <div class="testimonial-card bg-white p-4 rounded-4 shadow-sm h-100">
+                        <div class="d-flex align-items-center mb-3">
+                            <img src="https://source.unsplash.com/80x80/?professional" alt="User" class="rounded-circle me-3">
+                            <div>
+                                <h4 class="h5 fw-bold mb-0">Emma Wilson</h4>
+                                <p class="text-muted mb-0">Software Engineer</p>
+                            </div>
+                        </div>
+                        <p class="text-muted">"The best investment I've made in my professional development this year."</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-dark text-white py-5">
+        <div class="container">
+            <div class="row g-4">
+                <div class="col-lg-4">
+                    <h4 class="h5 fw-bold mb-3">Quiz Platform</h4>
+                    <p class="text-muted">Empowering learners through interactive education</p>
+                </div>
+                <div class="col-lg-2">
+                    <h5 class="h6 fw-bold mb-3">Quick Links</h5>
+                    <ul class="list-unstyled">
+                        <li><a href="#features" class="text-white text-decoration-none">Features</a></li>
+                        <li><a href="{{ url_for('login') }}" class="text-white text-decoration-none">Login</a></li>
+                        <li><a href="{{ url_for('register') }}" class="text-white text-decoration-none">Register</a></li>
+                    </ul>
+                </div>
+                <div class="col-lg-4">
+                    <h5 class="h6 fw-bold mb-3">Connect With Us</h5>
+                    <div class="social-links">
+                        <a href="#" class="text-white me-3"><i class="fab fa-twitter fa-lg"></i></a>
+                        <a href="#" class="text-white me-3"><i class="fab fa-linkedin fa-lg"></i></a>
+                        <a href="#" class="text-white me-3"><i class="fab fa-github fa-lg"></i></a>
+                    </div>
+                </div>
+            </div>
+            <hr class="my-5">
+            <p class="text-center text-muted mb-0">&copy; 2023 Quiz Platform. All rights reserved.</p>
+        </div>
+    </footer>
+</div>
+
+<style>
+    .hero-section {
+        padding: 8rem 0;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .feature-card {
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        border: none;
+    }
+
+    .feature-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+    }
+
+    .icon-wrapper {
+        width: 60px;
+        height: 60px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .testimonial-card {
+        transition: transform 0.3s ease;
+    }
+
+    .testimonial-card:hover {
+        transform: translateY(-5px);
+    }
+
+    .btn-rounded {
+        border-radius: 30px;
+    }
+
+    .animate__animated {
+        animation-duration: 1s;
+    }
+</style>
+{% endblock %}

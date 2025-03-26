@@ -1,0 +1,171 @@
+{% extends "base.html" %}
+
+{% block content %}
+<!-- Navbar Section -->
+<nav class="navbar navbar-expand-lg navbar-dark shadow-sm" style="background: linear-gradient(135deg, #6366f1, #7c3aed);">
+    <div class="container">
+        <a class="navbar-brand d-flex align-items-center fw-bold" href="#">
+            <i class="fas fa-brain me-2 fs-4"></i>
+            QuizMaster Admin
+        </a>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ms-auto">
+                <li class="nav-item mx-2">
+                    <a class="nav-link active" href="{{ url_for('home') }}">
+                        <i class="fas fa-home me-1"></i>Home
+                    </a>
+                </li>
+                <li class="nav-item mx-2">
+                    <a class="nav-link active" href="{{ url_for('admin_summary') }}">
+                        <i class="fas fa-chart-pie me-1"></i>Analytics
+                    </a>
+                </li>
+                <li class="nav-item mx-2">
+                    <a class="nav-link active" href="{{ url_for('users') }}">
+                        <i class="fas fa-user-cog me-1"></i>User Management
+                    </a>
+                </li>
+                <li class="nav-item mx-2">
+                    <a class="nav-link" href="{{ url_for('logout') }}">
+                        <i class="fas fa-sign-out-alt me-1"></i>Logout
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+<br>
+<div class="dashboard-header">
+    <div class="container">
+        <h1 class="display-5 mb-3">📊 Performance Dashboard</h1>
+        
+    </div>
+    
+</div>
+    
+</div>
+
+<div class="container">
+    <div class="metrics">
+        <div class="metric">
+            <div class="metric-value">{{ total_attempts }}</div>
+            <div>Total Attempts</div>
+        </div>
+        <div class="metric">
+            <div class="metric-value">{{ overall_avg }}</div>
+            <div>Average Score</div>
+        </div>
+        <div class="metric">
+            <div class="metric-value">{{ highest_score }}</div>
+            <div>Highest Score</div>
+        </div>
+    </div>
+
+    <div class="chart">
+        <h3>Daily Performance</h3>
+        <canvas id="trendChart"></canvas>
+    </div>
+
+    <div class="chart">
+        <h3>Subject Performance</h3>
+        <canvas id="subjectChart"></canvas>
+    </div>
+</div>
+<style>
+    .dashboard-header {
+    background: linear-gradient(135deg, #4a90e2 0%, #6c5ce7 100%);
+    color: white;
+    padding: 2rem 0;
+    margin-bottom: 2rem;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+}
+    body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 0px;
+    }
+
+    .container {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 20px;
+        max-width: 1200px;
+        margin: 0 auto;
+    }
+
+    .metrics {
+        grid-column: 1 / -1;
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 15px;
+    }
+
+    .metric {
+        background: #f8f9fa;
+        padding: 0px;
+        text-align: center;
+        border-radius: 8px;
+    }
+
+    .metric-value {
+        font-size: 24px;
+        font-weight: bold;
+        color: #4F46E5;
+        margin: 10px 0;
+    }
+
+    .chart {
+        background: white;
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        height: 400px;
+    }
+
+    @media (max-width: 768px) {
+        .container {
+            grid-template-columns: 1fr;
+        }
+    }
+</style>
+
+<script>
+    // Common chart configuration
+    const chartOptions = {
+        responsive: true,
+        maintainAspectRatio: false,
+        scales: {
+            y: { beginAtZero: true }
+        }
+    };
+
+    // Daily Performance
+    new Chart(document.getElementById('trendChart'), {
+        type: 'line',
+        data: {
+            labels: {{ daily_labels | tojson }},
+            datasets: [{
+                label: 'Average Score',
+                data: {{ daily_scores | tojson }},
+                borderColor: '#4F46E5',
+                tension: 0.4
+            }]
+        },
+        options: chartOptions
+    });
+
+    // Subject Performance
+    new Chart(document.getElementById('subjectChart'), {
+        type: 'bar',
+        data: {
+            labels: {{ subject_names | tojson }},
+            datasets: [{
+                label: 'Average Score',
+                data: {{ subject_scores | tojson }},
+                backgroundColor: '#10B981'
+            }]
+        },
+        options: chartOptions
+    });
+</script>
+{% endblock %}

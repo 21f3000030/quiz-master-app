@@ -1,0 +1,177 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<!-- Navbar Section -->
+<nav class="navbar navbar-expand-lg navbar-dark shadow-sm" style="background: linear-gradient(135deg, #6366f1, #7c3aed);">
+    <div class="container">
+        <a class="navbar-brand d-flex align-items-center fw-bold" href="#">
+            <i class="fas fa-brain me-2 fs-4"></i>
+            QuizMaster Admin
+        </a>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ms-auto">
+                <li class="nav-item mx-2">
+                    <a class="nav-link active" href="{{ url_for('admin_dashboard') }}">
+                        <i class="fas fa-home me-1"></i>Dashboard
+                    </a>
+                </li>
+                <li class="nav-item mx-2">
+                    <a class="nav-link active" href="{{ url_for('admin_summary') }}">
+                        <i class="fas fa-chart-pie me-1"></i>Analytics
+                    </a>
+                </li>
+                
+                <li class="nav-item mx-2">
+                    <a class="nav-link" href="{{ url_for('logout') }}">
+                        <i class="fas fa-sign-out-alt me-1"></i>Logout
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<div class="container py-4">
+    <!-- Page Header -->
+    <div class="text-center mb-5">
+        <h1 class="display-5 fw-bold text-gradient-primary mb-3">User Management</h1>
+        <p class="text-muted opacity-75">Manage registered users and track learning progress</p>
+    </div>
+
+    <!-- Search Bar -->
+    <div class="card shadow-sm border-0 mb-4">
+        <div class="card-body p-3">
+            <form method="GET" action="{{ url_for('users') }}" class="d-flex gap-2">
+                <div class="input-group input-group-lg">
+                    <span class="input-group-text bg-transparent border-end-0">
+                        <i class="fas fa-search text-muted"></i>
+                    </span>
+                    <input 
+                        type="text" 
+                        name="search" 
+                        class="form-control border-start-0 ps-0" 
+                        placeholder="Search users..." 
+                        value="{{ request.args.get('search', '') }}"
+                        style="border-radius: 12px;"
+                    >
+                </div>
+                <button type="submit" class="btn btn-primary px-4 d-flex align-items-center" 
+                        style="border-radius: 12px;">
+                    <i class="fas fa-search me-2"></i>Search
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Users Table -->
+    <div class="card shadow-sm border-0 overflow-hidden">
+        <div class="card-body p-0">
+            <div class="table-responsive">
+                <table class="table table-hover align-middle mb-0">
+                    <thead class="bg-gradient-primary text-white">
+                        <tr>
+                            <th scope="col" class="ps-4 py-3 fw-medium">#</th>
+                            <th scope="col" class="py-3 fw-medium">User</th>
+                            <th scope="col" class="py-3 fw-medium">Contact</th>
+                            <th scope="col" class="text-center py-3 fw-medium">Activity</th>
+                            <th scope="col" class="text-center pe-4 py-3 fw-medium">Performance</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% if users %}
+                            {% for idx, user in enumerate(users, start=1) %}
+                            <tr class="hover-shadow">
+                                <th scope="row" class="ps-4">{{ idx }}</th>
+                                <td>
+                                    <div class="d-flex align-items-center">
+                                        <div class="avatar bg-primary text-white rounded-circle me-3">
+                                            {{ user.full_name[0] }}
+                                        </div>
+                                        <div>
+                                            <p class="mb-0 fw-medium">{{ user.full_name }}</p>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td>
+                                    <a href="mailto:{{ user.email }}" class="text-decoration-none">
+                                        {{ user.email }}
+                                    </a>
+                                </td>
+                                <td class="text-center">
+                                    <span class="badge bg-primary bg-opacity-10 text-primary py-2 px-3">
+                                        {{ user.quizzes_attempted }} Quizzes
+                                    </span>
+                                </td>
+                                <td class="text-center pe-4">
+                                    <div class="progress" style="height: 8px; width: 120px; margin: 0 auto;">
+                                        <div class="progress-bar bg-primary" 
+                                             role="progressbar" 
+                                             style="width: {{ user.average_performance }}%" 
+                                             aria-valuenow="{{ user.average_performance }}" 
+                                             aria-valuemin="0" 
+                                             aria-valuemax="100">
+                                        </div>
+                                    </div>
+                                    <small class="text-muted mt-1 d-block">
+                                        {{ user.average_performance }}% Avg.
+                                    </small>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        {% else %}
+                        <tr>
+                            <td colspan="5" class="text-center text-muted py-4">
+                                <i class="fas fa-user-slash fa-2x mb-3"></i>
+                                <p class="mb-0 fs-5">No users found matching your criteria</p>
+                            </td>
+                        </tr>
+                        {% endif %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+.text-gradient-primary {
+    background: linear-gradient(135deg, #6366f1, #7c3aed);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.avatar {
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 500;
+}
+
+.table-hover tbody tr {
+    transition: all 0.2s ease;
+    cursor: pointer;
+}
+
+.hover-shadow:hover {
+    transform: translateX(4px);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+}
+
+.bg-gradient-primary {
+    background: linear-gradient(135deg, #6366f1, #7c3aed);
+}
+
+.progress-bar {
+    border-radius: 4px;
+}
+
+.card {
+    border-radius: 16px;
+    border: 1px solid rgba(0,0,0,0.05);
+}
+</style>
+
+{% endblock %}
